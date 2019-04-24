@@ -1,0 +1,4 @@
+__pycache__
+*.pkd
+*.json
+scrapped_data
