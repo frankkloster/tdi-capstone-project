@@ -1,6 +1,15 @@
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.decomposition import NMF, LatentDirichletAllocation 
+import pyLDAvis.sklearn
+from spacy.lang.en import English
+from spacy.lang.en.stop_words import STOP_WORDS
+import string
+import re
+
+parser = English()
+stopwords = list(STOP_WORDS)
+punctuations = string.punctuation
 
 def get_words(text, n_features=5000):
     '''
@@ -35,10 +44,8 @@ def get_topics(tf, tfidf, n_components):
     """
     Given a tf and tfidf, returns an LDA and NMF fit of the text.
     """
-    lda = LatentDirichletAllocation(n_components=n_components, max_iter=5,
-                                learning_method='online',
-                                learning_offset=50.,
-                                random_state=0)
+    lda = LatentDirichletAllocation(n_components=n_components, max_iter=10,
+                                learning_method='online')
 
     lda.fit(tf)
 
@@ -69,3 +76,16 @@ def topic_analysis_pipeline(text, n_components=10, n_top_words=10):
     print_top_words(nmf, tfidf_feature_names, n_top_words)
 
     return
+
+def spacy_tokenizer(sentence):
+    web_address = re.compile('^https')
+    mytokens = parser(sentence)
+    mytokens = [ word.lemma_.lower().strip() if word.lemma_ != "-PRON-" else word.lower_ for word in mytokens ]
+    mytokens = [ word for word in mytokens if word not in stopwords and word not in punctuations ]
+    mytokens = [word for word in mytokens if not re.match(web_address, word)]
+    mytokens = " ".join([i for i in mytokens])
+    return mytokens
+
+def graph_lda(lda, tf, tf_vectorizer):
+    dash = pyLDAvis.sklearn.prepare(lda, tf, tf_vectorizer, mds='tsne')
+    dash
