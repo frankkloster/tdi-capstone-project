@@ -23,9 +23,7 @@ def get_words(text, n_features=5000):
     tf - A term frequency vectorizer fitted with the text.
     tfidf - A tfidf vectorizer fitted with the text.
     '''
-
-#    text = df[column].dropna().values
-
+    
     tfidf_vectorizer = TfidfVectorizer(max_df=0.99, min_df=2,
                                    max_features=n_features,
                                    stop_words='english')
