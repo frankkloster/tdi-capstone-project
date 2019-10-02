@@ -1,3 +1,0 @@
-Reddit:
-client_id 'DSM34_lt9cvyuA'
-client_secret 'Ch8FLPNfi4CIYw4InkpSTYw20cM'
