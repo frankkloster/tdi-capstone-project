@@ -1,5 +1,8 @@
 __pycache__
 *.pkd
 *.json
+*.csv
 scrapped_data
 misc_data
+.ipynb_checkpoints/
+.vscode/

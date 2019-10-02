@@ -92,9 +92,11 @@ class Tweets():
                 tweet_matches.append(tweet_text)
         return tweet_matches
 
-    def generate_lda_graph(self, n_components=10):
+    def generate_lda_graph(self, n_components=10, save_as=None):
         tf, tf_vectorizer, tfidf, tfidf_vectorizer = get_words(self.df.processed_text.dropna().values)
         lda, nmf = get_topics(tf, tfidf, n_components)
         pyLDAvis.enable_notebook()
         dash = pyLDAvis.sklearn.prepare(lda, tf, tf_vectorizer, mds='tsne')
+        if save_as:
+            pyLDAvis.save_html(dash, save_as)
         return dash
